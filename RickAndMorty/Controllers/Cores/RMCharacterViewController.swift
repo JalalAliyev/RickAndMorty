@@ -1,24 +1,21 @@
 import UIKit
 
 final class RMCharacterViewController: UIViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         title = "Characters"
         view.backgroundColor = .systemBackground
-
-        let request = RMRequest(endpoint: .character,
-                                queryParameters: [
-                                    URLQueryItem(name: "name", value: "rick"),URLQueryItem(name: "status", value: "alive")
-                                ]
-        )
         
-        RMService.shared.execute(request, expecting: String.self) {result in
+        RMService.shared.execute(.listCharactersRequest, expecting: RMGetAllCharactersResponse.self) { result in
             switch result {
-            case .success(
+            case .success(let model):
+                print(String(describing: model))
+            case .failure(let error):
+                print(String(describing: error))
             }
         }
     }
-
+    
 }
