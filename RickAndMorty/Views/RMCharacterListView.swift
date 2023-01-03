@@ -1,6 +1,15 @@
 import UIKit
 
-final class CharacterListView: UIView {
+protocol RMCharacterListViewProtocol: AnyObject {
+    func rmCharacterListView(
+        _ characterListView: RMCharacterListView,
+        didSelectCharacter character: RMCharacter
+    )
+}
+
+final class RMCharacterListView: UIView {
+    
+    public weak var delegate: RMCharacterListViewProtocol?
     
     private let viewModel = RMCharacterListViewModel()
     
@@ -9,7 +18,7 @@ final class CharacterListView: UIView {
         spinner.hidesWhenStopped = true
         spinner.color = .red
         spinner.translatesAutoresizingMaskIntoConstraints = false
-        spinner.backgroundColor = .systemGray2
+        spinner.backgroundColor = .secondarySystemBackground
         spinner.layer.cornerRadius = 10
         return spinner
     }()
@@ -22,7 +31,8 @@ final class CharacterListView: UIView {
         collectionView.alpha = 0
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.showsVerticalScrollIndicator = false
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView.register(RMCharacterCollectionViewCell.self, forCellWithReuseIdentifier: RMCharacterCollectionViewCell.identifier)
+        collectionView.register(RMFooterLoadingCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: RMFooterLoadingCollectionReusableView.identifier)
         return collectionView
     }()
     
@@ -32,7 +42,8 @@ final class CharacterListView: UIView {
         translatesAutoresizingMaskIntoConstraints = false
         addConstraints()
         spinner.startAnimating()
-        
+        viewModel.delegate = self
+        viewModel.getCharacters()
         configureCollectionView()
     }
     
@@ -56,13 +67,26 @@ final class CharacterListView: UIView {
     private func configureCollectionView() {
         collectionView.dataSource = viewModel
         collectionView.delegate = viewModel
-        
-        DispatchQueue.main.asyncAfter(deadline: .now()+2, execute: {
-            self.spinner.stopAnimating()
-            self.collectionView.isHidden = false
-            UIView.animate(withDuration: 1) {
-                self.collectionView.alpha = 1
-            }
-        })
+    }
+}
+
+extension RMCharacterListView: RMCharacterListViewModelDelegate {
+    func didLoadInitialCharacters() {
+        spinner.stopAnimating()
+        collectionView.isHidden = false
+        collectionView.reloadData()
+        UIView.animate(withDuration: 1) {
+            self.collectionView.alpha = 1
+        }
+    }
+    
+    func didSelectCharacter(_ character: RMCharacter) {
+        delegate?.rmCharacterListView(self, didSelectCharacter: character)
+    }
+    
+    func didLoadMoreCharacters(with newIndexPaths: [IndexPath]) {
+        collectionView.performBatchUpdates {
+            self.collectionView.insertItems(at: newIndexPaths)
+        }
     }
 }
