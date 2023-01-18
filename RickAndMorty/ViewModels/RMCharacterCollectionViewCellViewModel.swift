@@ -13,7 +13,6 @@ final class RMCharacterCollectionViewCellViewModel: Hashable, Equatable {
         self.charStatus = charStatus
         self.charImageUrl = charImageUrl
     }
-    
     public var characterSatusText: String {
         return charStatus.text
     }

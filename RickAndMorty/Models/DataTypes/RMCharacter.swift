@@ -14,35 +14,3 @@ struct RMCharacter: Codable {
     let url: String
     let created: String
 }
-
-enum RMCharacterStatus: String, Codable {
-    case alive = "Alive"
-    case dead = "Dead"
-    case unknown = "unknown"
-    
-    var text: String {
-        switch self {
-        case .alive, .dead:
-            return "Status: \(rawValue)"
-        case .unknown:
-            return "Status: Unknown"
-        }
-    }
-}
-
-enum RMCharacterGender: String, Codable {
-    case female = "Female"
-    case male  = "Male"
-    case genderless = "Genderless"
-    case unknown = "unknown"
-}
-
-struct RMCharacterOrigin: Codable {
-    let name: String
-    let url: String
-}
-
-struct RMCharacterLocation: Codable {
-    let name: String
-    let url: String
-}
