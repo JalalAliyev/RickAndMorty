@@ -8,5 +8,4 @@ final class RMSettingsViewController: UIViewController {
         title = "Settings"
         view.backgroundColor = .systemBackground
     }
-
 }

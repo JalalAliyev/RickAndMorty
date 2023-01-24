@@ -87,7 +87,7 @@ final class RMCharacterDetailViewModel {
                 )
         )
         item.contentInsets = NSDirectionalEdgeInsets(
-            top: 2,
+            top: 3,
             leading: 2,
             bottom: 2,
             trailing: 2

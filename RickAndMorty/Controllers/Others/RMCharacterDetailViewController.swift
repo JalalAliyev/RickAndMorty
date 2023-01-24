@@ -105,6 +105,7 @@ extension RMCharacterDetailViewController: UICollectionViewDelegate {
             let episodes = self.viewModel.episodes
             let selection = episodes[indexPath.row]
             let vc = RMEpisodeDetailViewController(url: URL(string: selection))
+            vc.navigationItem.largeTitleDisplayMode = .never
             navigationController?.pushViewController(vc, animated: true)
         }
     }

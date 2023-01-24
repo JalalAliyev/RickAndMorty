@@ -1,4 +1,4 @@
-import Foundation
+import UIKit
 
 protocol RMEpisodeDataRender {
     var name: String { get }
@@ -8,6 +8,7 @@ protocol RMEpisodeDataRender {
 
 final class RMCharacterEpisodeCollectionViewCellViewModel: Hashable, Equatable {
     private let episodeDataUrl: URL?
+    public let borderColor: UIColor
     private var isFetching = false
     private var dataBlock: ((RMEpisodeDataRender) -> Void)?
     private var epidode: RMEpisode? {
@@ -19,8 +20,9 @@ final class RMCharacterEpisodeCollectionViewCellViewModel: Hashable, Equatable {
         }
     }
     
-    init(episodeDataUrl: URL?) {
+    init(episodeDataUrl: URL?, borderColor: UIColor = .systemBlue) {
         self.episodeDataUrl = episodeDataUrl
+        self.borderColor = borderColor
     }
     
     public func registerForData(_ block: @escaping (RMEpisodeDataRender) -> Void) {

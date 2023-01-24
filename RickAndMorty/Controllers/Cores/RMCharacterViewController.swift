@@ -9,6 +9,7 @@ final class RMCharacterViewController: UIViewController {
         
         title = "Characters"
         view.backgroundColor = .systemBackground
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(didSearchTapped))
         configureView()
     }
     
@@ -23,6 +24,12 @@ final class RMCharacterViewController: UIViewController {
         ])
     }
     
+    @objc private func didSearchTapped() {
+        let vc = RMSearchViewController(config: .init(type: .character))
+        vc.navigationItem.largeTitleDisplayMode = .never
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
 }
 
 extension RMCharacterViewController: RMCharacterListViewProtocol {
@@ -30,7 +37,6 @@ extension RMCharacterViewController: RMCharacterListViewProtocol {
         // Open detail controller for that character
         let characterVM = RMCharacterDetailViewModel(character: character)
         let detailVC = RMCharacterDetailViewController(viewModel: characterVM)
-        detailVC.navigationItem.largeTitleDisplayMode = .never
         navigationController?.pushViewController(detailVC, animated: true)
     }
     
